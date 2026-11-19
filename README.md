@@ -16,7 +16,7 @@ ohMyRhine 让大模型扮演作者编写的角色，在聊天中与人对话。�
 依赖 [uv](https://docs.astral.sh/uv/)，由它安装 Python 3.14 和项目依赖。
 
 ```sh
-git clone <仓库地址> ohMyRhine
+git clone https://github.com/aulimaru/ohmyrhine.git ohMyRhine
 cd ohMyRhine
 uv sync
 cp config.example.yaml config.yaml

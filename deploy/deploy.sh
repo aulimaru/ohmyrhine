@@ -27,7 +27,7 @@ cd "$(dirname "$0")/.."
 ssh "$target_host" mkdir -p "$DEST"
 # Sync the application only. The host owns its config.yaml, credentials and runtime data.
 rsync -az --delete --exclude .git --exclude-from=.gitignore \
-    src characters deploy docs README.md config.example.yaml pyproject.toml uv.lock .python-version \
+    src characters deploy docs README.md LICENSE config.example.yaml pyproject.toml uv.lock .python-version \
     "$target_host:$DEST/"
 
 ssh "$target_host" bash -s -- "$DEST" "$RESTART" <<'REMOTE'
