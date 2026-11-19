@@ -1,0 +1,68 @@
+# ohMyRhine 的配置。复制成 config.yaml 再改，每一项的说明见 docs/configuration.md。
+# 路径相对于这个文件所在的目录。改完用 `uv run rhine doctor` 检查。
+
+# 每个任务用哪家的哪个模型，`uv run rhine models` 列出内置的模型。
+# 密钥默认从环境变量读：ANTHROPIC_API_KEY、OPENAI_API_KEY、DEEPSEEK_API_KEY、GEMINI_API_KEY。
+tasks:
+  roleplay:              # 角色的回复：用最好的模型
+    provider: anthropic
+    model: claude-opus-5-5
+    fallbacks: default   # 被安全分类器拒绝时，由服务端换模型重试
+  reply_judge:           # 群聊里先判断角色会不会开口：小模型就够
+    provider: anthropic
+    model: claude-haiku-5-5
+  vision:                # 给图片和表情包写描述：要能看图
+    provider: anthropic
+    model: claude-haiku-5-5
+  summary:               # 旧消息移出上下文时写滚动摘要
+    provider: anthropic
+    model: claude-opus-5-5
+    fallbacks: default
+
+# 只想走通流程、不调模型时，把上面整个 tasks 换成：
+# tasks:
+#   roleplay: {provider: echo}
+
+# 改从文件读密钥，或者接别的 OpenAI 兼容服务：
+# providers:
+#   anthropic:
+#     api_key_file: ~/.config/ohmyrhine/anthropic.key
+#   qwen:
+#     type: openai_api
+#     base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+#     api_key_env: DASHSCOPE_API_KEY
+
+characters_dir: characters
+data_dir: data
+history_tokens: 24000    # 送给模型的聊天记录大约多少 token，更早的交给滚动摘要
+log_thinking: false      # 把每次回复的思考摘要和原文记进 data/logs/
+
+group:
+  judge: true            # 群聊里先经过 reply_judge
+  wait_short_s: 6        # 有人分几条发时，等多少秒
+  wait_long_s: 15        # 话断在半截时，等多少秒
+  dice: false            # 角色的账号替群里掷骰子时打开
+
+media:
+  live_images: 4         # 最近几张图以原图发给 roleplay；0 表示只给文字描述
+
+memory:
+  summary_chars: 1500    # 滚动摘要的长度
+  notes_chars: 4000      # 角色的笔记超过这么长时，提醒角色整理
+
+# 某个角色和上面不同的地方（密钥仍只写在 providers 里）：
+# characters:
+#   dafeiyu:
+#     tasks:
+#       roleplay: {provider: deepseek, model: deepseek-flash}   # 整项替换
+#     group: {dice: true}                                        # 其余沿用上面的
+
+# 让角色能翻以前的聊天记录（history）、上网查资料（search）。
+# 交给本机已登录的 Claude Code（claude）、Codex（codex）或 Antigravity（agy），走它们自己的订阅额度。
+# lookup:
+#   history: {harness: claude, model: sonnet, effort: medium}
+#   search: {harness: claude, model: sonnet, effort: medium}
+#   reference:             # 可选：相关的问题先查这份本地资料
+#     description: 活动的日程和场地说明
+#     path: data/reference
+#     format: text         # text：直接读目录里的文字；git_html：先更新已有的 Git 仓库，再把 HTML 转成文字

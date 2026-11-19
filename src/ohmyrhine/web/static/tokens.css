@@ -1,0 +1,211 @@
+/* ===== Design tokens =====
+   Cool neutral greys with a periwinkle accent, in three themes: light,
+   graphite and ink. <html data-theme> picks one; index.html sets it before
+   the first paint and app.js keeps it in step with the viewer's choice. */
+:root,
+[data-theme="light"] {
+    color-scheme: light;
+    --page: #f6f7f9;
+    --surface: #ffffff;
+    --surface-subtle: #f8f9fb;
+    --surface-sunken: #eef0f4;
+    --surface-overlay: rgba(246, 247, 249, 0.88);
+    --line: #dde1e7;
+    --line-strong: #c3c9d2;
+
+    --text: #232429;
+    --text-2: #3f444e;
+    --text-muted: #646a76;
+    --text-faint: #8e94a0;
+    --heading: #565b65;
+
+    --accent: #5466ad;
+    --accent-strong: #3f4f8f;
+    --accent-soft: #eef0fa;
+    --accent-soft-2: #e0e4f5;
+    --accent-line: #b5bde3;
+    --on-accent: #ffffff;
+    --link: #5466ad;
+
+    --neg-bg: #f6e0e0;
+    --neg-line: #d39a9a;
+    --neg-text: #8a3030;
+    --warn-bg: #f7ecd0;
+    --warn-line: #d9bb6a;
+    --warn-text: #6d5310;
+
+    --mark: #fbe5a4;
+    --mark-text: #2a2410;
+    --danger: #b3423f;
+    --on-danger: #ffffff;
+    --focus: #5466ad;
+    --focus-ring: 0 0 0 3px rgba(84, 102, 173, 0.22);
+
+    --shadow-sm: 0 1px 2px rgba(24, 29, 40, 0.06);
+    --shadow: 0 2px 8px rgba(24, 29, 40, 0.08);
+    --shadow-lg: 0 12px 32px rgba(24, 29, 40, 0.16), 0 2px 6px rgba(24, 29, 40, 0.08);
+    --shadow-dialog: 0 24px 60px rgba(24, 29, 40, 0.28), 0 4px 12px rgba(24, 29, 40, 0.12);
+    --scrim: rgba(15, 20, 30, 0.35);
+
+    /* The line that marks the current item and fills a meter. */
+    --signal-line: #6577c0;
+
+    /* Faces: everyone in a chat gets a hue of their own (--hue on the face),
+       drawn at this lightness and chroma, on a tint of it. */
+    --face-l: 47%;
+    --face-c: 0.1;
+    --face-bg-l: 94.5%;
+    --face-bg-c: 0.028;
+}
+
+[data-theme="graphite"] {
+    color-scheme: dark;
+    --page: #15171b;
+    --surface: #1d2026;
+    --surface-subtle: #1a1d22;
+    --surface-sunken: #111317;
+    --surface-overlay: rgba(21, 23, 27, 0.9);
+    --line: #2d3139;
+    --line-strong: #434955;
+
+    --text: #e3e5ea;
+    --text-2: #c4c8d0;
+    --text-muted: #969ca8;
+    --text-faint: #6c7280;
+    --heading: #aeb4bf;
+
+    --accent: #8494e0;
+    --accent-strong: #b1bdf3;
+    --accent-soft: #22273a;
+    --accent-soft-2: #2b3250;
+    --accent-line: #48527f;
+    --on-accent: #0f1220;
+    --link: #97a7ef;
+
+    --neg-bg: #3a2021;
+    --neg-line: #9c5656;
+    --neg-text: #f1aaaa;
+    --warn-bg: #3a3017;
+    --warn-line: #8f7630;
+    --warn-text: #ecd48a;
+
+    --mark: #5a4813;
+    --mark-text: #fde7a6;
+    --danger: #e57b77;
+    --on-danger: #1b0d0c;
+    --focus: #8494e0;
+    --focus-ring: 0 0 0 3px rgba(132, 148, 224, 0.35);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+    --shadow-dialog: 0 24px 60px rgba(0, 0, 0, 0.65), 0 4px 12px rgba(0, 0, 0, 0.45);
+    --scrim: rgba(0, 0, 0, 0.5);
+
+    --signal-line: #94a3ee;
+
+    --face-l: 80%;
+    --face-c: 0.085;
+    --face-bg-l: 30%;
+    --face-bg-c: 0.035;
+}
+
+[data-theme="ink"] {
+    color-scheme: dark;
+    --page: #000000;
+    --surface: #0c0c0e;
+    --surface-subtle: #0a0a0c;
+    --surface-sunken: #000000;
+    --surface-overlay: rgba(0, 0, 0, 0.88);
+    --line: #232328;
+    --line-strong: #3a3a42;
+
+    --text: #f2f2f5;
+    --text-2: #d4d4da;
+    --text-muted: #9d9da8;
+    --text-faint: #6e6e79;
+    --heading: #c4c4cc;
+
+    --accent: #9aa7ff;
+    --accent-strong: #c7cfff;
+    --accent-soft: #15172a;
+    --accent-soft-2: #1d2140;
+    --accent-line: #434a85;
+    --on-accent: #05060f;
+    --link: #a9b5ff;
+
+    --neg-bg: #2e0f12;
+    --neg-line: #b4525a;
+    --neg-text: #ffb3b8;
+    --warn-bg: #2c2408;
+    --warn-line: #9c8126;
+    --warn-text: #f6dd8e;
+
+    --mark: #5c4a00;
+    --mark-text: #fff0b3;
+    --danger: #ff8a85;
+    --on-danger: #1f0705;
+    --focus: #9aa7ff;
+    --focus-ring: 0 0 0 3px rgba(154, 167, 255, 0.4);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px #232328;
+    --shadow-dialog: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 0 1px #2a2a30;
+    --scrim: rgba(0, 0, 0, 0.6);
+
+    --signal-line: #a9b5ff;
+
+    --face-l: 82%;
+    --face-c: 0.095;
+    --face-bg-l: 21%;
+    --face-bg-c: 0.04;
+}
+
+:root {
+    --radius-sm: 4px;
+    --radius: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+
+    --font-ui: "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    --font-serif: "Noto Serif CJK SC", "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+    --font-mono: "JetBrains Mono", "JetBrainsMono Nerd Font", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    /* The parts of the screen a phone keeps for itself (notch, home indicator). */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+
+    --nav-h: calc(52px + var(--safe-top));
+    --gutter: max(clamp(16px, 3vw, 32px), var(--safe-left), var(--safe-right));
+    /* The width of the conversation itself. */
+    --column: 760px;
+    --side-w: 264px;
+    --drawer-w: 392px;
+
+    /* Spring curves, sampled from damped springs: glide never overshoots
+       (things that slide or resize), spring overshoots slightly (surfaces
+       that open), jelly wobbles (small confirmations), exit is a quick fade. */
+    --ease-glide: cubic-bezier(0.25, 0.8, 0.3, 1);
+    --ease-spring: cubic-bezier(0.3, 1.3, 0.5, 1);
+    --ease-jelly: cubic-bezier(0.3, 1.6, 0.5, 1);
+    --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+@supports (transition-timing-function: linear(0, 1)) {
+    :root {
+        --ease-glide: linear(0, 0.057, 0.18, 0.32, 0.454, 0.572, 0.67, 0.749, 0.812, 0.86, 0.896, 0.924, 0.944, 0.959, 0.971, 0.979, 0.985, 0.989, 0.992, 0.994, 1);
+        --ease-spring: linear(0, 0.044, 0.149, 0.284, 0.428, 0.565, 0.687, 0.789, 0.871, 0.933, 0.977, 1.007, 1.026, 1.035, 1.038, 1.037, 1.033, 1.028, 1.023, 1.018, 1.013, 1.009, 1.005, 1.003, 1);
+        --ease-jelly: linear(0, 0.056, 0.193, 0.37, 0.556, 0.728, 0.872, 0.983, 1.059, 1.105, 1.124, 1.124, 1.111, 1.091, 1.068, 1.045, 1.025, 1.009, 0.997, 0.989, 0.985, 0.984, 0.985, 0.987, 0.99, 0.993, 0.996, 0.998, 1);
+    }
+}
+
+/* Phones: a shorter top bar. */
+@media (max-width: 720px) {
+    :root {
+        --nav-h: calc(48px + var(--safe-top));
+        --gutter: max(12px, var(--safe-left), var(--safe-right));
+    }
+}

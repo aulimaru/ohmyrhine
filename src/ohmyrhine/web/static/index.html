@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f7f9">
+<title>ohMyRhine</title>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<script>
+// The theme is set before the first paint; app.js keeps it in step later.
+(() => {
+    let theme = "system", dark = "graphite";
+    try {
+        theme = JSON.parse(localStorage.getItem("ohmyrhine.theme")) || theme;
+        dark = JSON.parse(localStorage.getItem("ohmyrhine.dark")) || dark;
+    } catch {}
+    const night = matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.dataset.theme = theme === "system" ? (night ? dark : "light") : theme;
+})();
+</script>
+<link rel="stylesheet" href="/static/tokens.css">
+<link rel="stylesheet" href="/static/base.css">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <button class="btn icon only-narrow" id="open-side" type="button" aria-label="会话" data-tip="会话" data-icon="sidebar"></button>
+    <div class="brand"><svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+      <path d="M12 3.6c-4.7 0-8.5 3.2-8.5 7.1 0 2.3 1.3 4.3 3.3 5.6l-.6 4.1 4.2-2.3c.5.1 1 .1 1.6.1 4.7 0 8.5-3.2 8.5-7.5S16.7 3.6 12 3.6Z" stroke-width="1.3" stroke-linejoin="round"/>
+      <ellipse cx="12" cy="10.7" rx="10" ry="3.3" stroke-width="1" opacity=".55" transform="rotate(-18 12 10.7)"/>
+      <circle cx="12" cy="10.7" r="2" fill="currentColor" stroke="none"/>
+      <circle cx="21.4" cy="7.6" r="1.2" fill="currentColor" stroke="none"/>
+    </svg><span>ohMyRhine</span></div>
+    <nav class="nav" id="nav" data-slide aria-label="面板">
+      <button type="button" data-panel="memory" data-tip="笔记" data-icon-before="feather"><span>笔记</span></button>
+      <button type="button" data-panel="scenes" data-tip="情景" data-icon-before="film"><span>情景</span></button>
+      <button type="button" data-panel="context" data-tip="上下文" data-icon-before="gauge"><span>上下文</span></button>
+      <button type="button" data-panel="prompt" data-tip="提示词" data-icon-before="code"><span>提示词</span></button>
+    </nav>
+    <div class="topbar-space"></div>
+    <div class="topbar-tools">
+      <button class="search-trigger" id="open-palette" type="button" aria-label="命令" data-tip="命令 Ctrl K" data-tip-side="end" data-icon-before="search"><span>命令</span><kbd class="kbd">Ctrl K</kbd></button>
+      <button class="btn icon only-phone" id="panels-btn" type="button" aria-label="面板" data-icon="layers"></button>
+      <button class="btn icon" id="theme-btn" type="button" aria-label="主题" data-tip="主题" data-tip-side="end" data-icon="sun"></button>
+      <button class="btn icon" id="settings-btn" type="button" aria-label="设置" data-tip="设置" data-tip-side="end" data-icon="settings"></button>
+    </div>
+  </header>
+
+  <aside class="side" id="side" aria-label="会话">
+    <button class="who-switch" id="who-switch" type="button" aria-haspopup="menu"></button>
+    <div class="side-head">
+      <span class="label">会话</span><span class="count" id="session-count"></span>
+      <span class="grow"></span>
+      <button class="btn icon sm" id="new-session" type="button" aria-label="新会话" data-tip="新会话" data-icon="plus"></button>
+    </div>
+    <ul class="sessions" id="sessions"></ul>
+    <div class="side-foot"><button class="me-row" id="me" type="button" aria-label="你的身份"></button></div>
+  </aside>
+
+  <main class="chat" id="chat">
+    <header class="chat-head" id="chat-head"></header>
+    <section class="thread" id="thread"><div class="thread-inner" id="messages" aria-live="polite"></div></section>
+    <footer class="composer">
+      <button class="jump" id="jump" type="button" hidden data-icon-before="arrowDown">最新消息</button>
+      <div class="composer-box" id="composer-box">
+        <div class="slash" id="slash" hidden></div>
+        <div class="quote-bar" id="quote-bar" hidden>
+          <span id="quote-text"></span>
+          <button class="btn icon sm" id="quote-cancel" type="button" aria-label="不引用了" data-tip="不引用了" data-tip-side="top" data-icon="x"></button>
+        </div>
+        <div class="staged" id="staged" hidden></div>
+        <textarea id="input" rows="1" placeholder="说点什么…" aria-label="消息"></textarea>
+        <div class="composer-row">
+          <button class="btn icon" id="attach-image" type="button" aria-label="发图片" data-tip="发图片" data-tip-side="top" data-icon="image"></button>
+          <button class="btn icon" id="attach-sticker" type="button" aria-label="发表情包" data-tip="发表情包" data-tip-side="top" data-icon="smile"></button>
+          <span class="composer-hint"><span><kbd class="kbd">Enter</kbd>发送</span><span><kbd class="kbd">Shift</kbd><kbd class="kbd">Enter</kbd>换行</span><span><kbd class="kbd">/</kbd>命令</span></span>
+          <button class="send" id="send" type="button" aria-label="发送" data-icon="arrowUp"></button>
+          <button class="send stop" id="stop" type="button" aria-label="停下" data-icon="stop" hidden></button>
+        </div>
+      </div>
+      <input type="file" id="file-image" accept="image/*" multiple hidden>
+      <input type="file" id="file-sticker" accept="image/*" hidden>
+    </footer>
+  </main>
+
+  <aside class="drawer" id="drawer" hidden>
+    <header class="drawer-head"><span id="drawer-icon"></span><h2 id="drawer-title"></h2>
+      <button class="btn icon" id="drawer-close" type="button" aria-label="关闭" data-tip="关闭" data-tip-side="end" data-icon="x"></button>
+    </header>
+    <div class="drawer-body" id="drawer-body"></div>
+  </aside>
+</div>
+<div class="layer-scrim" id="layer-scrim" hidden></div>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

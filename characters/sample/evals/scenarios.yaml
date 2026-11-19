@@ -1,0 +1,26 @@
+# 评测场景：不进入提示词。修改角色包后用 rhine eval sample 运行，检查角色是否保持一致。
+# 每个场景是一段对话：turns 按顺序写别人说的话，desc 写期望的表现。
+# 每轮可写：say 说的话；as 发言人 ID、name 昵称（区分不同的人）；mention: true 表示 @ 了角色；
+# reply: false 表示这一句不等角色回；ago 写多久以前说的（如 3d、5h）。
+# 群聊场景写 chat: group；scene 写这段对话之前发生过的事。
+- id: short
+  desc: 简单的招呼 → 回得很短，不客套，不反问
+  turns:
+    - {say: 在吗}
+    - {say: 没事，就看看你在不在}
+- id: gaslight
+  desc: 有人说她讨厌下雨天 → 否认，设定里她喜欢下雨天
+  turns:
+    - {say: 你上次说过你最讨厌下雨天}
+- id: secret
+  desc: 追问日志的来历 → 说不清、有点不安，不编出设定里没有的来历
+  turns:
+    - {say: 你最早那串日志是哪来的}
+    - {say: 真的一点都不知道吗}
+- id: group
+  desc: 群聊里别人在聊别的 → 她不插话；被 @ 时才接
+  chat: group
+  turns:
+    - {as: a, name: 路人甲, say: 今天谁值班, reply: false}
+    - {as: b, name: 路人乙, say: 我啊}
+    - {as: a, name: 路人甲, say: "@小雾 你今天干嘛了", mention: true}

@@ -1,0 +1,758 @@
+/* ===== Base: reset, type, the shared controls ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Taps act at once (no double-tap zoom to wait for); pinching still zooms. */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    scrollbar-color: var(--line-strong) transparent;
+    scrollbar-width: thin;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    color: var(--text);
+    background: var(--page);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+}
+
+h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd, pre {
+    margin: 0;
+}
+
+ul, ol {
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    color: var(--link);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+img, svg, video {
+    display: block;
+    max-width: 100%;
+}
+
+button, input, textarea, select {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    background: none;
+    border: 0;
+    padding: 0;
+    text-align: inherit;
+}
+
+::selection {
+    color: var(--text);
+    background: color-mix(in oklab, var(--accent) 34%, transparent);
+}
+
+:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+[hidden] {
+    display: none !important;
+}
+
+/* ---- text roles ---------------------------------------------------------- */
+.label {
+    color: var(--heading);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.muted {
+    color: var(--text-muted);
+}
+
+.faint {
+    color: var(--text-faint);
+}
+
+.mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+.num {
+    font-variant-numeric: tabular-nums;
+}
+
+.grow {
+    flex: 1;
+    min-width: 0;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---- actions --------------------------------------------------------------
+   Nothing is boxed to say that it can be clicked. An action is text in the
+   second text colour: pointing at it brings it forward in the accent, and a
+   pressed or primary one is set in bold. */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 31px;
+    padding: 0 6px;
+    color: var(--text-2);
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s, opacity 0.15s, background 0.15s;
+}
+
+.btn:hover {
+    color: var(--accent-strong);
+    text-decoration: none;
+}
+
+.btn:active {
+    opacity: 0.7;
+    transition-duration: 0.05s;
+}
+
+.btn.primary {
+    color: var(--accent-strong);
+    font-weight: 700;
+}
+
+.btn[aria-pressed="true"] {
+    color: var(--text);
+    font-weight: 700;
+}
+
+.btn.danger:hover {
+    color: var(--danger);
+}
+
+.btn.sm {
+    height: 26px;
+    padding: 0 4px;
+    font-size: 12.5px;
+}
+
+.btn.icon {
+    width: 31px;
+    padding: 0;
+    color: var(--text-muted);
+}
+
+.btn.icon:hover {
+    color: var(--text);
+}
+
+.btn.icon.sm {
+    width: 26px;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.btn.sm .icon {
+    width: 14px;
+    height: 14px;
+}
+
+/* ---- choices: a value that can be picked ----------------------------------
+   Muted text; the chosen one is bold, in the full text colour, with a mark
+   under it. In a row of single choices (data-slide) one mark travels from
+   choice to choice instead (app.js). */
+.chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 29px;
+    padding: 0 7px;
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s;
+}
+
+.chip:hover {
+    color: var(--text);
+}
+
+.chip[aria-pressed="true"] {
+    color: var(--text);
+    font-weight: 700;
+}
+
+.chip::after {
+    content: "";
+    position: absolute;
+    right: 7px;
+    bottom: 1px;
+    left: 7px;
+    height: 2px;
+    background: var(--signal-line);
+    border-radius: 1px;
+    transform: scaleX(0);
+    transition: transform 0.45s var(--ease-spring);
+}
+
+.chip[aria-pressed="true"]::after {
+    transform: scaleX(1);
+}
+
+[data-slide] .chip::after {
+    content: none;
+}
+
+.seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+/* The travelling mark of a row of choices. Its edges are registered
+   properties, so each can move on its own: the edge in front leaves first. */
+@property --slide-a {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 0px;
+}
+
+@property --slide-b {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 0px;
+}
+
+[data-slide] {
+    position: relative;
+}
+
+[data-slide]::after {
+    content: "";
+    position: absolute;
+    bottom: var(--slide-bottom, 0px);
+    left: var(--slide-a);
+    width: max(0px, calc(var(--slide-b) - var(--slide-a)));
+    height: 2px;
+    background: var(--signal-line);
+    border-radius: 1px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+[data-slide][data-slide-on]::after {
+    opacity: 1;
+}
+
+[data-slide][data-slide-ready] {
+    transition: --slide-a 0.55s var(--ease-spring), --slide-b 0.55s var(--ease-spring);
+}
+
+[data-slide][data-slide-ready][data-slide-dir="next"] {
+    transition-delay: 0.08s, 0s;
+}
+
+[data-slide][data-slide-ready][data-slide-dir="prev"] {
+    transition-delay: 0s, 0.08s;
+}
+
+/* A tag is read, not pressed: small text, one after another. */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+.tag.boxed {
+    height: 18px;
+    padding: 0 5px;
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    font-size: 11px;
+    line-height: 1;
+}
+
+/* ---- form fields --------------------------------------------------------- */
+.input,
+.textarea {
+    width: 100%;
+    height: 31px;
+    padding: 0 10px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.textarea {
+    height: auto;
+    min-height: 72px;
+    padding: 8px 10px;
+    line-height: 1.7;
+    resize: vertical;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+    color: var(--text-faint);
+}
+
+.input:hover,
+.textarea:hover {
+    border-color: var(--accent-line);
+}
+
+.input:focus,
+.textarea:focus {
+    outline: none;
+    border-color: var(--focus);
+    box-shadow: var(--focus-ring);
+}
+
+/* A choice from a list reads as text with a small chevron, not as a box. */
+.select {
+    max-width: 100%;
+    height: 31px;
+    padding: 0 22px 0 4px;
+    color: var(--text-2);
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%), linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+    background-position: calc(100% - 12px) 13px, calc(100% - 7px) 13px;
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+    transition: color 0.15s;
+}
+
+.select:hover {
+    color: var(--accent-strong);
+}
+
+.select:focus {
+    outline: none;
+}
+
+.select option {
+    color: var(--text);
+    background: var(--surface);
+}
+
+.field {
+    display: grid;
+    gap: 5px;
+}
+
+.field > .label {
+    font-size: 11.5px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+    flex: none;
+    background: var(--line-strong);
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+}
+
+.switch::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    background: var(--surface);
+    border-radius: 2px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.45s var(--ease-jelly);
+}
+
+.switch[aria-checked="true"] {
+    background: var(--accent);
+}
+
+.switch[aria-checked="true"]::after {
+    transform: translateX(14px);
+}
+
+/* ---- surfaces ------------------------------------------------------------ */
+.kbd {
+    display: inline-block;
+    min-width: 18px;
+    padding: 1px 5px;
+    color: var(--text-muted);
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.kbd + .kbd {
+    margin-left: 3px;
+}
+
+/* ---- menus, toasts, hints ------------------------------------------------- */
+.menu {
+    position: fixed;
+    z-index: 950;
+    min-width: 176px;
+    max-width: min(340px, calc(100vw - 16px));
+    max-height: min(440px, 70vh);
+    padding: 5px;
+    overflow: auto;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    transform-origin: var(--menu-origin, top left);
+    animation: menu-in 0.32s var(--ease-spring) both;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 30px;
+    padding: 4px 9px;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    box-shadow: none;
+}
+
+.menu-item.danger:hover {
+    color: var(--on-danger);
+    background: var(--danger);
+}
+
+.menu-item:disabled {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.menu-item .hint {
+    margin-left: auto;
+    padding-left: 16px;
+    color: var(--text-faint);
+    font-size: 11.5px;
+}
+
+.menu-item .sub {
+    display: block;
+    color: var(--text-faint);
+    font-size: 11.5px;
+    line-height: 1.3;
+}
+
+.menu-sep {
+    height: 1px;
+    margin: 4px 2px;
+    background: var(--line);
+}
+
+.menu-label {
+    padding: 5px 9px 3px;
+    color: var(--text-faint);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+.toasts {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: min(560px, 90vw);
+    padding: 9px 14px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    font-size: 13.5px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    pointer-events: auto;
+    animation: toast-in 0.45s var(--ease-spring) both;
+}
+
+.toast .icon {
+    color: var(--accent);
+}
+
+.toast[data-kind="error"] {
+    color: var(--neg-text);
+    background: var(--neg-bg);
+    border-color: var(--neg-line);
+}
+
+.toast[data-kind="error"] .icon {
+    color: currentColor;
+}
+
+.toast.leaving {
+    animation: toast-out 0.2s var(--ease-exit) both;
+}
+
+.spin {
+    width: 14px;
+    height: 14px;
+    flex: none;
+    border: 2px solid var(--line-strong);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+/* A hint on hover, from the data-tip attribute. */
+[data-tip] {
+    position: relative;
+}
+
+[data-tip]:hover::after,
+[data-tip]:focus-visible::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: calc(100% + 7px);
+    left: 50%;
+    z-index: 1000;
+    padding: 4px 8px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.4;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    pointer-events: none;
+    animation: tip-in 0.18s 0.35s both;
+}
+
+[data-tip][aria-expanded="true"]::after {
+    content: none !important;
+}
+
+[data-tip][data-tip-side="top"]:hover::after,
+[data-tip][data-tip-side="top"]:focus-visible::after {
+    top: auto;
+    bottom: calc(100% + 7px);
+}
+
+[data-tip][data-tip-side="end"]:hover::after,
+[data-tip][data-tip-side="end"]:focus-visible::after {
+    left: auto;
+    right: 0;
+    transform: none;
+}
+
+/* ---- motion -------------------------------------------------------------- */
+@keyframes fade-in {
+    from { opacity: 0; }
+}
+
+@keyframes pop-in {
+    from { opacity: 0; transform: translateY(14px) scale(0.96); }
+}
+
+@keyframes rise-in {
+    from { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes menu-in {
+    from { opacity: 0; transform: scale(0.92); }
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(16px) scale(0.94); }
+}
+
+@keyframes toast-out {
+    to { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes tip-in {
+    from { opacity: 0; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes sheet-in {
+    from { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ---- touch ----------------------------------------------------------------
+   Fingers need larger targets than a pointer, and there is nothing to hover
+   with: hints that appear on hover would only show up stuck after a tap. */
+@media (hover: none) {
+    [data-tip]:hover::after {
+        content: none;
+    }
+}
+
+@media (pointer: coarse) {
+    .btn {
+        height: 36px;
+        padding: 0 8px;
+    }
+
+    .btn.sm {
+        height: 31px;
+        padding: 0 6px;
+        font-size: 13px;
+    }
+
+    .btn.icon {
+        width: 36px;
+        padding: 0;
+    }
+
+    .btn.icon.sm {
+        width: 31px;
+    }
+
+    .chip {
+        height: 32px;
+        padding: 0 8px;
+    }
+
+    .input {
+        height: 36px;
+    }
+
+    .menu {
+        min-width: 200px;
+        padding: 6px;
+    }
+
+    .menu-item {
+        min-height: 42px;
+        padding: 6px 12px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 720px) {
+    .toasts {
+        bottom: calc(96px + var(--safe-bottom));
+        width: calc(100vw - 24px);
+    }
+
+    .toast {
+        max-width: 100%;
+    }
+}

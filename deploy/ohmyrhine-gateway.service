@@ -1,0 +1,13 @@
+# User service installed by deploy/deploy.sh. gateway.env can set RHINE_GATEWAY_ARGS.
+[Unit]
+Description=ohMyRhine connector gateway
+
+[Service]
+WorkingDirectory=%h/servers/ohMyRhine
+EnvironmentFile=-%E/ohmyrhine/gateway.env
+ExecStart=%h/servers/ohMyRhine/.venv/bin/rhine-gateway -c %h/servers/ohMyRhine/config.yaml --host 127.0.0.1 $RHINE_GATEWAY_ARGS
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

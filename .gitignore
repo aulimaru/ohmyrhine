@@ -1,0 +1,32 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv
+
+# Runtime data
+data/
+/snapshots/
+*.db
+*.db-wal
+*.db-shm
+
+# Local configuration and credentials
+/config.yaml
+/config.local.yaml
+.env
+.env.*
+*.key
+*.token
+/.aws/
+
+# Agent scratch and local config
+.scratch/
+CLAUDE.local.md
